@@ -90,6 +90,12 @@ Page(Object.assign({}, common, db, {
     })
   },
 
+  goToSubscribe() {
+    wx.navigateTo({
+      url: '/pages/my/subscribe'
+    });
+  },
+
   goToAlbum() {
     wx.navigateTo({
       url: '/pages/my/album'

@@ -12,7 +12,7 @@ const fileCollection = db.collection('file');
 const springCollection = db.collection('spring');
 const checkinCollection = db.collection('checkin');
 const checkinLogCollection = db.collection('checkinLog');
-const studentCollection = db.collection('student');
+const subscribeFolderCollection = db.collection('subscribeFolder');
 
 const _ = db.command;
 const $ = db.command.aggregate
@@ -134,13 +134,17 @@ export default {
     })
   },
 
-  getStudentList() {
+  getSubscribeList(skip, field = 'createTime', orderBy = 'desc') {
     return new Promise((resolve, reject) => {
-      studentCollection.aggregate()
-      .limit(100)
-      .end()
+      subscribeFolderCollection.where({
+        status: true
+      })
+      .orderBy(field, orderBy)
+      .skip(skip)
+      .limit(20)
+      .get()
       .then(res => {
-        resolve(res.list)
+        resolve(res.data)
       })
     })
   },

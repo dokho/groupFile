@@ -1,120 +1,131 @@
 {
-	"description": "项目配置文件",
-	"packOptions": {
-		"ignore": []
-	},
-	"cloudfunctionRoot": "functions/",
-	"setting": {
-		"urlCheck": true,
-		"es6": true,
-		"postcss": true,
-		"preloadBackgroundData": false,
-		"minified": true,
-		"newFeature": true,
-		"coverView": true,
-		"autoAudits": true,
-		"showShadowRootInWxmlPanel": true,
-		"scopeDataCheck": false,
-		"uglifyFileName": true,
-		"checkInvalidKey": true,
-		"checkSiteMap": true,
-		"uploadWithSourceMap": true,
-		"babelSetting": {
-			"ignore": [],
-			"disablePlugins": [],
-			"outputPath": ""
-		}
-	},
-	"compileType": "miniprogram",
-	"libVersion": "2.10.2",
-	"appid": "wx4677d54a0262cf52",
-	"projectname": "%E7%BE%A4%E6%96%87%E4%BB%B6",
-	"debugOptions": {
-		"hidedInDevtools": []
-	},
-	"isGameTourist": false,
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
-	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
-	"condition": {
-		"search": {
-			"current": -1,
-			"list": []
-		},
-		"conversation": {
-			"current": -1,
-			"list": []
-		},
-		"plugin": {
-			"current": -1,
-			"list": []
-		},
-		"game": {
-			"currentL": -1,
-			"list": []
-		},
-		"gamePlugin": {
-			"current": -1,
-			"list": []
-		},
-		"miniprogram": {
-			"current": -1,
-			"list": [
-				{
-					"id": -1,
-					"name": "我的",
-					"pathName": "pages/my/index",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": 1,
-					"name": "march",
-					"pathName": "pages/topic/march",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": 2,
-					"name": "分享文件夹",
-					"pathName": "pages/topic/index",
-					"query": "id=1583812440036_0.18976861611079543_33602337",
-					"scene": 1044,
-					"shareInfo": {
-						"groupName": "测试模拟群1",
-						"shareName": "-Hl-by3vGxbBKfCPR0bxMzBOHbtEquqLAM4h9QnTfNE@cr4dev",
-						"shareKey": "AtX_nafXg7TWDic60JBk_SVje-Tz0YtF7fgnilqGeJam25Jb8uWRueQpd2drxZ22FCFZR5QNXuWWmRu8VNrGyQ~~"
-					}
-				},
-				{
-					"id": -1,
-					"name": "统计",
-					"pathName": "pages/stats/index",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "打卡页面",
-					"pathName": "pages/topic/checkin",
-					"query": "id=af24d9d2-36e4-454a-a95f-68ca97fa8d1b",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "文件下载链接",
-					"pathName": "pages/index/link",
-					"query": "id=1583027271961_0.730378103470906_33568774",
-					"scene": null
-				},
-				{
-					"id": 6,
-					"name": "登录页面",
-					"pathName": "pages/login/index",
-					"query": "scene=7D1IuXraJYjTbxAsiF9hgKw6",
-					"scene": 1047
-				}
-			]
-		}
-	}
+  "description": "项目配置文件",
+  "packOptions": {
+    "ignore": []
+  },
+  "cloudfunctionRoot": "functions/",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "preloadBackgroundData": false,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": true,
+    "autoAudits": true,
+    "showShadowRootInWxmlPanel": true,
+    "scopeDataCheck": false,
+    "uglifyFileName": true,
+    "checkInvalidKey": true,
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "useMultiFrameRuntime": true,
+    "useApiHook": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "2.10.4",
+  "appid": "wx4677d54a0262cf52",
+  "projectname": "%E7%BE%A4%E6%96%87%E4%BB%B6",
+  "debugOptions": {
+    "hidedInDevtools": []
+  },
+  "isGameTourist": false,
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
+  "condition": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
+      "list": []
+    },
+    "plugin": {
+      "current": -1,
+      "list": []
+    },
+    "game": {
+      "currentL": -1,
+      "list": []
+    },
+    "gamePlugin": {
+      "current": -1,
+      "list": []
+    },
+    "miniprogram": {
+      "current": -1,
+      "list": [
+        {
+          "id": -1,
+          "name": "我的",
+          "pathName": "pages/my/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": 1,
+          "name": "march",
+          "pathName": "pages/topic/march",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": 2,
+          "name": "分享文件夹",
+          "pathName": "pages/topic/index",
+          "query": "id=1583812440036_0.18976861611079543_33602337",
+          "scene": 1044,
+          "shareInfo": {
+            "groupName": "测试模拟群1",
+            "shareName": "-Hl-by3vGxbBKfCPR0bxMzBOHbtEquqLAM4h9QnTfNE@cr4dev",
+            "shareKey": "AtX_nafXg7TWDic60JBk_SVje-Tz0YtF7fgnilqGeJam25Jb8uWRueQpd2drxZ22FCFZR5QNXuWWmRu8VNrGyQ~~"
+          }
+        },
+        {
+          "id": -1,
+          "name": "统计",
+          "pathName": "pages/stats/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "打卡页面",
+          "pathName": "pages/topic/checkin",
+          "query": "id=af24d9d2-36e4-454a-a95f-68ca97fa8d1b",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "文件下载链接",
+          "pathName": "pages/index/link",
+          "query": "id=1583027271961_0.730378103470906_33568774",
+          "scene": null
+        },
+        {
+          "id": 6,
+          "name": "登录页面",
+          "pathName": "pages/login/index",
+          "query": "scene=7D1IuXraJYjTbxAsiF9hgKw6",
+          "scene": 1047
+        },
+        {
+          "id": -1,
+          "name": "我的订阅",
+          "pathName": "pages/my/subscribe",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
 }

@@ -11,6 +11,10 @@ Page(Object.assign({}, common, db, {
     completeFileNum: 0,
     failFileNum: 0,
     uploadFileNum: 0,
+    banButton: [{
+      text: "确认",
+      type: "red"
+    }],
     fileType: {
       image: '图片',
       video: '视频',
@@ -53,6 +57,10 @@ Page(Object.assign({}, common, db, {
 
     if(folderId) {
       db.get('file', {_id:folderId}).then(res => {
+        this.setData({
+          folderId: folderId,
+          saveFolderId: res.saveFolderId
+        })
         wx.setNavigationBarTitle({
           title: res.filename
         })
@@ -131,7 +139,7 @@ Page(Object.assign({}, common, db, {
     this.loadData(folderId, bottom);
   },
 
-  loadData(folderId, bottom = false) {
+  loadData(folderId, bottom = false, saveFolderId = '') {
     wx.showLoading({
       title: '努力加载中',
     })
@@ -259,6 +267,7 @@ Page(Object.assign({}, common, db, {
     var progress = this.data.progress;
     var folderNum = this.data.folderNum;
     var lists = this.data.lists;
+    var folderId = this.data.folderId;
 
     var completeFileNum = this.data.completeFileNum;
     var failFileNum = this.data.failFileNum;
@@ -335,6 +344,18 @@ Page(Object.assign({}, common, db, {
         completeFileNum: 0,
         failFileNum: 0
       })
+
+      if(folderId) {
+        wx.cloud.callFunction({
+          name: 'sendSubscribeMessage',
+          data: {
+            folderId:folderId
+          },
+          success: res => {
+            console.log(res)
+          }
+        })
+      }
 
       setTimeout(function () {
         that.fade(0, 1500);
@@ -669,16 +690,19 @@ Page(Object.assign({}, common, db, {
     var that = this
     var lists = this.data.lists;
     var index = event.currentTarget.dataset.index;
+    var saveFolderId = this.data.saveFolderId;
     var picList = [];
 
     var fileInfo = lists[index];
 
     if(fileInfo['isFolder']) {
-      var folderId = fileInfo['id'];
-      
+      var folderId = fileInfo['saveFolderId'] ? fileInfo['saveFolderId'] : fileInfo['id'];
+      var saveFolderId = fileInfo['folderId'] ? saveFolderId : fileInfo['saveFolderId'];
+
       this.setData({
         folderId: folderId,
         prevFolderId: fileInfo['folderId'],
+        saveFolderId: saveFolderId,
         nowFileInfo: '',
         lists: [],
         noneFile: false
@@ -688,7 +712,7 @@ Page(Object.assign({}, common, db, {
         title: fileInfo['filename']
       })
 
-      this.loadData(folderId)
+      this.loadData(folderId, false, saveFolderId);
     }
 
     if(fileInfo['isImage']) {
@@ -782,7 +806,14 @@ Page(Object.assign({}, common, db, {
     this.setData({
       confirmDeleteFolder: true,
       maskHidden: true,
-      hideTools:false,
+      hideTools:false
+    })
+  },
+
+  cancelDel() {
+    this.setData({
+      maskHidden: true,
+      showFolderTools: false
     })
   },
 
@@ -928,6 +959,7 @@ Page(Object.assign({}, common, db, {
   },
 
   closeMask() {
+    console.log('close')
     var showBottomTools = {
       Filter: false,
       Topic: false,
@@ -941,7 +973,9 @@ Page(Object.assign({}, common, db, {
       showFolderTools: false,
       showBottomTools,
       hideTools: false,
-      nowFileInfo: []
+      nowFileInfo: [],
+      confirmDeleteFolder: false,
+      confirmDelete: false
     })
   },
 
@@ -1114,12 +1148,13 @@ Page(Object.assign({}, common, db, {
   },
 
   goToReturn() {
-
     var folderId = this.data.folderId;
+    var saveFolderId = this.data.saveFolderId;
     
     db.get('file', {_id:folderId}).then(res => {
       this.setData({
         folderId: res.folderId,
+        saveFolderId: saveFolderId,
         lists: [],
         noneFile: false,
         selectAll: true

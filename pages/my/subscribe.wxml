@@ -1,0 +1,10 @@
+<block wx:if="{{lists.length > 0}}">
+	<block wx:for="{{lists}}">
+		<view class="flex row" data-index="{{index}}" bindtap="goToFolder">
+			<view style="padding: 30rpx;position: relative;">
+				<image src="/images/extensions/folder.png" style="width: 50rpx;height: 50rpx;"/>
+			</view>
+			<view class="folderName">{{item.folderName}}</view>
+		</view>
+	</block>
+</block>

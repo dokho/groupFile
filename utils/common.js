@@ -186,6 +186,7 @@ export default {
           groupId: folderInfo['groupId'],
           topicType: folderInfo['topicType'],
           createTime: folderInfo['createTime'],
+          saveFolderId: folderInfo['saveFolderId'],
           createDate: folderInfo['createDate'],
         }
 
@@ -203,6 +204,7 @@ export default {
 	      groupId: folderInfo['groupId'],
 	      folderId: folderInfo['folderId'],
 	      prevFolderId: folderInfo['prevFolderId'],
+	      saveFolderId: folderInfo['saveFolderId'],
 	      createTime: this.formatDate(folderInfo['createTime']),
 	    }
 	},

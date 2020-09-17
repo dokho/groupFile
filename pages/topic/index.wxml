@@ -92,4 +92,27 @@
 		</block>
 	</view>
 </view>
-<toast id="tui-tips-ctx"></toast>
+<view class="flex toolbar {{lengthScreen ? 'fix-iphonex-button' : ''}}" wx:if="{{!hideTools}}">
+	<view class="icon {{isSubscribe ? '' : 'gray'}}" style="width: 50%" bindtap="showSubscribe">
+		<image src="/images/icon/{{isSubscribe ? 'subscribed' : 'subscribe'}}.png"/>
+		<view>{{isSubscribe ? '已订阅' : '订阅'}}</view>
+	</view>
+	<view class="icon gray" style="width: 33%" bindtap="showSave">
+		<image src="/images/icon/save.png"/>
+		<view>保存</view>
+	</view>
+	<button style="background-color: #fff;padding: 0rpx;line-height: 0rpx;margin:0;width: 50%;" open-type="share">
+		<view class="icon gray" style="width: 100%;line-height: 35rpx;">
+			<image src="/images/icon/share.png"/>
+			<view>分享</view>
+		</view>
+	</button>
+</view>
+
+<modal show="{{showUpdate}}" bind:click="againSubscribeOp" bind:cancel="cancelOp" content="文件夹有新资源更新" color="#999" size="32" shape="circle" fadein="true" button="{{updateButton}}"></modal>
+
+<modal show="{{confirmSubscribe}}" bind:click="subscribeOp" bind:cancel="cancelOp" content="确认订阅该文件夹，订阅后如有更新会收到通知" color="#999" size="32" shape="circle" fadein="true"></modal>
+
+<modal show="{{confirmSave}}" bind:click="saveOp" bind:cancel="cancelOp" content="确认保存该文件夹到我的空间" color="#999" size="32" shape="circle" fadein="true"></modal>
+
+<modal show="{{commpleteUpdate}}" bind:click="goToFolder" bind:cancel="cancelDel" content="保存成功，是否立即查看" color="#999" size="32" shape="circle" fadein="true"></modal>

@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/index/link",
     "pages/my/index",
+    "pages/my/subscribe",
     "pages/login/index",
     "pages/topic/index"
   ],

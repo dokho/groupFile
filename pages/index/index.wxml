@@ -304,4 +304,6 @@
 
 <modal show="{{confirmDownLoad}}" bind:click="downLoadFile" bind:cancel="cancelDel" content="目前只支持图片和视频下载，确认是否下载？" color="#999" size="32" shape="circle" fadein="true"></modal>
 
+<modal show="{{banOpShow}}" bind:click="banOpShow" bind:cancel="cancelDel" content="此文件夹为共享文件夹，禁止修改相关操作" color="#999" size="32" shape="circle" fadein="true" button="{{banButton}}"></modal>
+
 <toast id="tui-tips-ctx"></toast>

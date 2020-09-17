@@ -7,21 +7,41 @@ Page(Object.assign({}, common, db, {
     noneFile: false,
     selectAll: true,
     isSelected: false,
-    lists:[]
+    lists:[],
+    updateButton: [{
+      text: "点击查看",
+      type: "red"
+    }]
   },
 
   onLoad(option) {
     var that = this;
     var safeArea = wx.getStorageSync('safeArea');
     var userInfo = wx.getStorageSync('userInfo');
+    var status = option.status;
     var id = option.id;
-
+    
     this.setData({
       userInfo: userInfo,
       folderId: id,
       firstFolder: id,
+      status: status,
       lengthScreen: safeArea.bottom > 667 ? true : false
     })
+
+    var where = {
+      folderId: id,
+      status: true
+    }
+
+    db.get('subscribeFolder', where).then(result => {
+      if(result) {
+        this.setData({
+          isSubscribe: true,
+          updateTime: result['createTime']
+        })
+      }
+    });
 
     db.getUserInfo().then(result => {
       if(!result) {
@@ -106,6 +126,8 @@ Page(Object.assign({}, common, db, {
     var skip = old_data.length;
     var topic = this.data.topic;
     var groupId = this.data.groupId;
+    var status = this.data.status;
+    var isSubscribe = this.data.isSubscribe;
 
     wx.cloud.callFunction({
       name: 'getFolder',
@@ -121,8 +143,10 @@ Page(Object.assign({}, common, db, {
         var folderShare = res.result.folderShare;
         var fileList = res.result.fileList;
         var isOp = folderShare == groupId ? true : false;
+        var showUpdate = status == 'update' && !isSubscribe ? true : false;
 
         that.setData({
+          title: title,
           isOp: isOp
         })
 
@@ -138,9 +162,10 @@ Page(Object.assign({}, common, db, {
 
             that.setData({
               topic: topic,
+              showUpdate: showUpdate,
               lists:old_data.concat(resultList)
             })
-          }, 500)
+          }, 1000)
         } else {
           wx.hideLoading()
           that.setData({
@@ -253,9 +278,9 @@ Page(Object.assign({}, common, db, {
     var prevFolderId = this.data.prevFolderId;
 
     db.get('file', {_id:folderId}).then(res => {
-      subFolder = res.folderId != firstFolder ? true : false;
+      subFolder = res && res.folderId != firstFolder ? true : false;
       this.setData({
-        folderId: res.folderId,
+        folderId: res ? res.folderId : folderId,
         lists: [],
         noneFile: false,
         subFolder: subFolder
@@ -479,6 +504,152 @@ Page(Object.assign({}, common, db, {
     });
   },
 
+  showSubscribe() {
+    var isSubscribe = this.data.isSubscribe;
+    this.setData({
+      confirmSubscribe: isSubscribe ? false : true
+    })
+  },
+
+  showSave() {
+    this.setData({
+      confirmSave: true
+    })
+  },
+
+  subscribeOp(event) {
+    var index = event.detail.index;
+    var folderId = this.data.folderId;
+    var title = this.data.title;
+
+    if(index == 1) {
+      this.subscribeMessage(folderId);
+
+      var data = {
+        folderId:folderId,
+        folderName: title,
+        status: true,
+        createTime: new Date().getTime()
+      }
+
+      db.add('subscribeFolder', data).then(res => {
+        this.setData({
+          confirmSubscribe: false,
+        })
+      })
+    } else {
+      this.cancelOp()
+    }
+  },
+
+  againSubscribeOp() {
+    var folderId = this.data.folderId;
+    this.subscribeMessage(folderId);
+    this.setData({
+      showUpdate: false,
+    })
+  },
+
+  subscribeMessage(folderId) {
+    var that = this;
+    var subscribeTmplIds = 'mACNdXq9tT0GK4H3jk2OyJpAOl3YtQtdrX2ODXXUpHA';  
+    var timeStamp = new Date();
+
+    wx.requestSubscribeMessage({
+      tmplIds: [subscribeTmplIds],
+      success (res) {
+        if (res.errMsg === 'requestSubscribeMessage:ok') {
+          var subscribeData = {
+            page: 'pages/topic/index?id=' + folderId + '&status=update', // 订阅消息卡片点击后会打开小程序的哪个页面
+            data: {
+              thing1: {value: '你订阅的文件目录有更新'},
+              time3: {value: common.formatDate(timeStamp)}
+            }, // 订阅消息的数据
+            templateId: subscribeTmplIds, // 订阅消息模板ID
+            miniprogram_state: 'trial',
+            done: false,
+            folderId: folderId,
+            createTime: new Date().getTime()
+          }
+          db.add('subscribeMessage', subscribeData);
+
+          that.setData({
+            isSubscribe: true
+          })
+        }
+      },
+    })
+  },
+
+  saveOp(event) {
+    var that =  this;
+    var index = event.detail.index;
+    var folderId = this.data.folderId;
+    var title = this.data.title;
+    var folderInfo = [];
+
+    if(index == 1) {
+      db.get('file', {saveFolderId: folderId, status: true}).then(res => {
+
+        console.log(res);
+        return;
+        if(!res) {
+          folderInfo['filename'] = title;
+          folderInfo['isFolder'] = true;
+          folderInfo['folderId'] = '';
+          folderInfo['type'] = 'folder';
+          folderInfo['saveFolderId'] = folderId;
+          folderInfo['createTime'] = new Date().getTime();
+          folderInfo['createDate'] = new Date();
+
+          common.addFolderData(folderInfo).then(res => {
+            setTimeout(function () {
+              wx.hideLoading();
+              that.setData({
+                folderId: res._id,
+                commpleteUpdate: true,
+                confirmSave: false
+              })
+            }, 1500)
+          })
+        } else {
+          setTimeout(function () {
+            wx.hideLoading();
+            that.setData({
+              folderId: res._id,
+              commpleteUpdate: true,
+              confirmSave: false
+            })
+          }, 1500)
+        }
+      })
+    } else {
+      this.cancelOp()
+    }
+  },
+
+  goToFolder(event) {
+    var index = event.detail.index;
+    var folderId = this.data.folderId;
+    if(index == 1) {
+      wx.navigateTo({
+        url: '/pages/index/index?folderId=' + folderId
+      });
+    } else {
+      this.setData({
+        commpleteUpdate: false,
+      })
+    }
+  },
+
+  cancelOp() {
+    this.setData({
+      confirmSubscribe: false,
+      confirmSave: false,
+      showUpdate: false,
+    })
+  },
+
   closeMask() {
     var showBottomTools = {
       Filter: false,
@@ -493,5 +664,19 @@ Page(Object.assign({}, common, db, {
       hideTools: false,
       nowFileInfo: []
     })
-  }
+  },
+
+  onShareAppMessage: function (res) {
+    var title = this.data.title;
+    var folderId = this.data.folderId;
+    var userInfo = this.data.userInfo;
+    var title = userInfo.nickName + '推荐给你“' + title +'"';
+    var path = "/pages/topic/index?id=" + folderId + "&form=topic";
+
+    return {
+      title: title,
+      path: path,
+      imageUrl: ''
+    }
+  },
 }))

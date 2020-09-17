@@ -13,13 +13,14 @@
 		</view>
 	</view>
 </button>
-<!-- <view class="flex justify-between row" bindtap="goToTask">
+<view class="flex justify-between row" bindtap="goToSubscribe">
 	<view class="flex">
-		<image src="/images/my/task.png" class="icon"/>
-		<view style="margin-left: 20rpx;">我的任务</view>
+		<image src="/images/icon/subscribed.png" class="icon"/>
+		<view style="margin-left: 20rpx;">我的订阅</view>
 	</view>
 	<image src="/images/common/right-arrow.png" style="width: 28rpx;height: 28rpx;"/>
 </view>
+<!-- 
 <view class="flex justify-between row" bindtap="goToAlbum">
 	<view class="flex">
 		<image src="/images/my/album.png" class="icon"/>

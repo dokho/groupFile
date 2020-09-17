@@ -15,9 +15,7 @@ App({
         env: 'cuntest-dcyrx'
       })*/
 
-      wx.cloud.init({
-        env: 'cun-jpqv8'
-      })
+      wx.cloud.init()
     }
 
     wx.getSystemInfo({

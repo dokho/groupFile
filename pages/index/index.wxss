@@ -178,22 +178,6 @@ button::after{
 	text-align: center;
 }
 
-.width20 {
-	width: 20%;
-}
-
-.width25 {
-	width: 25%;
-}
-
-.width33 {
-	width: 33%;
-}
-
-.width50 {
-	width: 50%;
-}
-
 .solid {
 	background-color: #fff;
 	border: 2rpx solid rgba(253, 87, 70, 0.8);
