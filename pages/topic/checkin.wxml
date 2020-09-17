@@ -1,0 +1,124 @@
+<block wx:if="{{userInfo.isTeacher}}">
+	<view style="margin:30rpx 40rpx;font-size: 40rpx;text-align: center;">
+			{{year}}年{{month}}月{{day}}日统计
+	</view>
+	<block wx:for="{{selectList}}">
+		<view style="font-size: 26rpx;color:#333;background-color: #F4F4F4;padding: 20rpx;">
+			{{item.showTitle}}<block wx:if="{{item.subOption}}">（点击名字可查看详情）</block>
+		</view>
+		<view class="flex wrap" style="padding:30rpx 40rpx;">
+			<block wx:if="{{statsResult[item.fieldname].length > 0}}">
+				<block wx:for="{{statsResult[item.fieldname]}}" wx:for-item="list">
+					<view style="font-size: 24rpx;background-color: #FD5746;border-radius: 50rpx; width: 150rpx;color:#fff;text-align: center;padding:10rpx 0rpx;margin-right: 15rpx;margin-bottom: 10rpx;">
+							{{list.studentNum}}号{{list.studentName}}
+					</view>
+				</block>
+			</block>
+			<block wx:else>
+				无
+			</block>
+		</view>
+	</block>
+	<view style="font-size: 26rpx;color:#333;background-color: #F4F4F4;padding: 20rpx;">
+		未签到人员
+	</view>
+	<view class="flex wrap" style="padding:30rpx 40rpx;">
+		<block wx:if="{{noneCheckIn.length > 0}}">
+			<block wx:for="{{noneCheckIn}}" wx:for-item="list">
+				<view style="font-size: 24rpx;background-color: #FD5746;border-radius: 50rpx; width: 150rpx;color:#fff;text-align: center;padding:10rpx 0rpx;margin-right: 15rpx;margin-bottom: 10rpx;">
+						{{list.idNum}}号{{list.name}}
+				</view>
+			</block>
+		</block>
+		<block wx:else>
+			无
+		</block>	
+	</view>
+	<view style="font-size: 26rpx;color:#333;background-color: #F4F4F4;padding: 20rpx;">
+		无问题人员
+	</view>
+	<view class="flex wrap" style="padding:30rpx 40rpx;">
+		<block wx:if="{{noneStatus.length > 0}}">
+			<block wx:for="{{noneStatus}}" wx:for-item="list">
+				<view style="font-size: 24rpx;background-color: #F4F4F4;border-radius: 50rpx; width: 150rpx;color:#333;text-align: center;padding:10rpx 0rpx;margin-right: 15rpx;margin-bottom: 10rpx;">
+						{{list.idNum}}号{{list.name}}
+				</view>
+			</block>
+		</block>
+		<block wx:else>
+			无
+		</block>	
+	</view>
+</block>
+<block wx:else>
+	<block wx:if="{{userInfo.studentName}}">
+		<view style="margin:40rpx 40rpx;font-size: 40rpx;">
+			你好，{{userInfo.studentName}}家长
+		</view>
+		<block wx:for="{{selectList}}">
+			<view class="flex justify-between" style="margin:30rpx 40rpx;">
+				<view style="line-height:60rpx;">{{item.title}}</view>
+				<block wx:if="{{item.type == 'switch'}}">
+					<view>
+						<switch data-switchid="{{index}}" data-extend="{{item.extend}}" bindchange="switchChange"/>
+					</view>
+				</block>
+				<block wx:elif="{{item.type == 'picker'}}">
+					<view style="line-height:60rpx;">
+						<picker mode="time" data-switchid="{{index}}" bindchange="switchChange">
+						   	<view class="picker">
+								{{item.value || '点击选择时间'}}
+						   	</view>
+						</picker>
+					</view>
+				</block>	
+			</view>
+			<block wx:if="{{item.subOption}}">
+				<view class="flex justify-between" style="margin:30rpx 40rpx;" wx:if="{{item.show}}">
+					<view style="line-height:60rpx;">{{item.subOption.title}}</view>
+					<block wx:if="{{item.subOption.type == 'switch'}}">
+						<view>
+							<switch data-switchid="{{index}}" data-extend="{{item.extend}}" bindchange="subChange"/>
+						</view>
+					</block>
+					<block wx:elif="{{item.subOption.type == 'picker'}}">
+						<view style="line-height:60rpx;">
+							<picker mode="time" data-switchid="{{index}}" bindchange="subChange">
+							   	<view class="picker">
+									{{item.subOption.value || '点击选择时间'}}
+							   	</view>
+							</picker>
+						</view>
+					</block>
+				</view>
+			</block>
+		</block>
+
+
+		<view class="button" bindtap="confirmInfo" style="margin-bottom: 40rpx">
+			确认提交
+		</view>
+	</block>
+	<block wx:else>
+		<view style="text-align: center;margin-top: 130rpx;font-size: 30rpx;font-size: 30rpx;color:#333;">请选择学号绑定学生信息</view>
+		<view style="margin:50rpx 175rpx 60rpx 175rpx;width: 400rpx">
+			<picker bindchange="selectStudent" value="{{index}}" range="{{studentList}}" range-key="idNum">
+				<view style="font-size: 36rpx;">
+					学生学号：{{studentList[index]['idNum'] || '点击选择学号'}}
+			    </view>
+			    <view style="margin-top: 20rpx;font-size: 36rpx;">
+					学生姓名：{{studentList[index]['name'] || '选择学号填写'}}
+			    </view>
+			</picker>
+		</view>
+		<view class="button" bindtap="bindStudent">
+			确认绑定
+		</view>
+	</block>
+</block>
+
+<modal show="{{confirmBindStudent}}" data-type="folder" bind:click="confirmBind" bind:cancel="cancelDel" content="确认绑定信息？" color="#999" size="32" shape="circle" fadein="true"></modal>
+
+<modal show="{{confirmInfo}}" data-type="folder" bind:click="infoSubmit" bind:cancel="cancelDel" content="确认提交信息？" color="#999" size="32" shape="circle" fadein="true"></modal>
+
+<toast id="tui-tips-ctx"></toast>

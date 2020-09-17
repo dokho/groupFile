@@ -1,0 +1,20 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/index/link",
+    "pages/my/index",
+    "pages/login/index",
+    "pages/topic/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor":"#FD5746"
+  },
+  "usingComponents": {
+    "navBar": "/components/navBar/navBar",
+    "toast": "/components/toast/toast",
+    "modal": "/components/modal/modal"
+  },
+  "sitemapLocation": "sitemap.json"
+}

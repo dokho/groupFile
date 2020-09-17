@@ -1,0 +1,38 @@
+<button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="loginButton">
+	<view class="flex" style="margin:50rpx;">
+		<image src="{{userInfo.avatarUrl || '/images/icon/my.png'}}" style="width: 135rpx;height: 135rpx;border-radius: 50%;"/>
+		<view style="margin-left: 30rpx;">
+			<view>{{userInfo.nickName || '点击同步信息'}}</view>
+			<view style="margin-top: 10rpx;">
+				<progress percent="{{sizeProgress}}" active border-radius="10" stroke-width="10" style="width: 360rpx;"/>
+			</view>
+			<view class="flex" style="margin-top: 8rpx; font-size: 24rpx;">
+				<view>容量 {{showUserSize}} / {{showMaxSize}}</view>
+				<!-- <view style="line-height: 62rpx;margin-left: 15rpx;"><image src="/images/my/update.png" style="width: 30rpx;height: 30rpx;"/></view>-->
+			</view>
+		</view>
+	</view>
+</button>
+<!-- <view class="flex justify-between row" bindtap="goToTask">
+	<view class="flex">
+		<image src="/images/my/task.png" class="icon"/>
+		<view style="margin-left: 20rpx;">我的任务</view>
+	</view>
+	<image src="/images/common/right-arrow.png" style="width: 28rpx;height: 28rpx;"/>
+</view>
+<view class="flex justify-between row" bindtap="goToAlbum">
+	<view class="flex">
+		<image src="/images/my/album.png" class="icon"/>
+		<view style="margin-left: 20rpx;">我的相册</view>
+	</view>
+	<image src="/images/common/right-arrow.png" style="width: 28rpx;height: 28rpx;"/>
+</view> -->
+<button open-type="contact" class="loginButton" style="background-color: #fff;line-height: 35rpx;">
+<view class="flex justify-between row">
+	<view class="flex">
+		<image src="/images/my/guest.png" class="icon"/>
+		<view style="margin-left: 20rpx;">联系我们</view>
+	</view>
+	<image src="/images/common/right-arrow.png" style="width: 28rpx;height: 28rpx;"/>
+</view>
+</button>

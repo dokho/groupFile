@@ -1,0 +1,68 @@
+page {
+  background-color: #fff;
+  font-size: 30rpx;
+  color: #333;
+}
+
+button::after{
+	border: none;
+}
+
+.row {
+	background-color: #fff;
+	border-bottom:2rpx solid #f4f4f4;
+	position: relative;
+}
+
+.folderName {
+	width: 500rpx;
+	font-size: 30rpx;
+	color :#000;
+	font-weight: 800;
+	line-height: 100rpx;
+}
+
+.fileName {
+	width: 500rpx;
+	font-size: 26rpx;
+	color :#000;
+	margin-top: 20rpx;
+	font-weight: 800;
+	word-break: keep-all;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.time {
+	font-size: 24rpx;
+	color :#999;
+	margin-top: 5rpx;
+}
+
+.size {
+	font-size: 24rpx;
+	color :#999;
+	padding: 30rpx 20rpx;
+	width: auto;
+	text-align: center;
+}
+
+.button {
+	background-color: rgba(253, 87, 70, 0.8);
+	width: 360rpx;
+	height: 80rpx;
+	line-height: 80rpx;
+	border-radius: 10rpx;
+	color: #fff;
+	text-align: center;
+	border-radius: 50rpx;
+	font-size: 28rpx;
+	margin: 50rpx 195rpx;
+}
+
+.solid {
+	background-color: #fff;
+	border: 2rpx solid rgba(253, 87, 70, 0.8);
+	color: rgba(253, 87, 70, 0.8);
+}

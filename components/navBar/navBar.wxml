@@ -1,0 +1,51 @@
+<view class="lxy-nav-bar {{extClass}}" style="height: {{navBarHeight+ navBarExtendHeight}}px;">
+    <view class="lxy-nav-bar__placeholder {{ios ? 'ios' : 'android'}}" style="padding-top: {{navBarHeight+ navBarExtendHeight}}px;visibility: hidden;">
+    </view>
+    <view class="lxy-nav-bar__inner {{ios ? 'ios' : 'android'}}" style="{{navigationbarinnerStyle}}{{displayStyle}}">
+        <image src="/images/common/navbg.png" style="position: absolute;top:0;left: 0rpx;width: 750rpx;height: {{navBarHeight * 2}}rpx;"/>
+        <view class='lxy-nav-bar__left' style="{{navBarLeft}}">
+            <block wx:if="{{ruler}}">
+                <view bindtap="viewRuler" class="flex" style="font-size: 24rpx;font-weight: 500;margin-left: 20rpx;">
+                    <image src="/images/icon/help.png" style="width: 32rpx;height: 32rpx;vertical-align:middle;margin-right: 8rpx;"/>
+                    <text>{{rulerTitle}}</text>
+                </view>
+            </block>
+            <block wx:if="{{credits}}">
+                <view bindtap="viewRuler" class="flex" style="font-size: 24rpx;font-weight: 500;margin-left: 20rpx;">
+                    <image src="/images/icon/credits-white.png" style="width: 32rpx;height: 32rpx;vertical-align:middle;margin-right: 8rpx;"/><text>{{credits}} 积分</text>
+                </view>
+            </block>
+            <block wx:if="{{back&&!home}}">
+                <view bindtap="back" class="lxy-nav-bar__button lxy-nav-bar__btn_goback {{iconTheme}}"></view>
+            </block>
+            <block wx:if="{{!back&&home}}">
+                <view bindtap="home" class="lxy-nav-bar__button lxy-nav-bar__btn_gohome {{iconTheme}}"></view>
+            </block>
+            <block wx:elif="{{back&&home}}">
+                <view class="lxy-nav-bar__buttons {{ios ? 'ios' : 'android'}}" wx:if="{{home}}" style="margin-left: 20rpx;">
+                    <view bindtap="back" class="lxy-nav-bar__button lxy-nav-bar__btn_goback {{iconTheme}}" wx:if="{{back}}"></view>
+                    <view bindtap="home" class="lxy-nav-bar__button lxy-nav-bar__btn_gohome {{iconTheme}}"></view>
+                </view>
+            </block>
+            <block wx:if="{{avatar}}">
+                <view class="flex" style="margin-left: 65rpx;margin-top: 15rpx;">
+                    <image src="{{avatar}}" style="width: 70rpx;height: 70rpx;border-radius: 50%;"/>
+                    <view style="margin-left: 20rpx;width: 440rpx;">
+                        <view style="font-size: 22rpx;">{{nickName}}</view>
+                        <view style="font-size: 24rpx;letter-spacing:1rpx;">{{extData}}</view>
+                    </view>
+                </view>
+            </block>
+            <block wx:else>
+                <slot name="left"></slot>
+            </block>
+        </view>
+        <view class='lxy-nav-bar__center'>
+            <text>{{title}}</text>
+        </view>
+        <view class='lxy-nav-bar__right'>
+            <slot name="right"></slot>
+        </view>
+    </view>
+</view>
+

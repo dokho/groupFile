@@ -1,0 +1,10 @@
+<view style="margin-top: 320rpx;text-align: center;">
+	<image src="/images/extensions/{{fileInfo.type}}.png" style="width: 100rpx;height: 100rpx;" wx:if="{{fileInfo.type}}"/>
+	<view style="margin-top: 20rpx;margin-bottom: 0rpx;font-size: 30rpx;color: #333;">{{fileInfo.filename}}</view>
+	<view style="margin-top: 30rpx;margin-bottom: 40rpx;font-size: 24rpx;color: #999;">
+		点击下方按钮复制链接，用电脑浏览器打开下载
+	</view>
+	<button class="button" bindtap="getDownloadLink" style="background-color: {{buttonBgColor}}">点击复制下载链接</button>
+</view>
+
+<toast id="tui-tips-ctx"></toast>

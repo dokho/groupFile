@@ -1,0 +1,307 @@
+<view style="position: fixed;top:30rpx;left: 190rpx;width:750rpx;text-align: center;" wx:if="{{loading}}">
+	<view class="flex">
+		<image src="/images/icon/loading.gif" style="width: 36rpx;height: 36rpx;"/>
+		<view style="margin-left: 20rpx;font-size: 24rpx;color:#FD5746">很高兴看见你，正在加载中</view>
+	</view>
+</view>
+
+<view class="flex justify-center tips" wx:if="{{uploadTips}}" animation="{{animationData}}">
+	<block wx:if="{{!isComplete && uploadFileNum > 0}}">
+		<view>文件上传中 ({{completeFileNum + failFileNum}}/{{uploadFileNum}})</view>
+	</block>
+	<block wx:elif="{{isComplete}}">
+		<view>上传完成</view>
+	</block>
+	<block wx:else>
+		<view>准备上传中</view>
+	</block>
+</view>
+
+<view class="flex search">
+	<input class="input" placeholder="输入关键字" value="{{keyword}}" confirm-type="search" bindconfirm="goToSearch"/>
+	<view wx:if="{{type}}" bindtap="clearType">
+		<view class="label" style="right:{{keyword ? 185 : 145}}rpx;">
+			{{fileType[type]}} x
+		</view>
+	</view>
+	<view wx:if="{{keyword}}" bindtap="clearSearch">
+		<image src="/images/icon/close-black.png" style="width: 30rpx;height: 30rpx;position: absolute;top:35rpx;right:145rpx;"/>
+	</view>
+	<block wx:if="{{userInfo.avatarUrl}}">
+		<image src="{{userInfo.avatarUrl}}" style="width: 60rpx;height: 60rpx;border-radius: 50%;" data-page="my" bindtap="goToPage"/>
+	</block>
+	<block wx:else>
+		<button style="background-color: #fff;padding: 0rpx;line-height: 0rpx;margin:0;width: 80rpx;height: 80rpx;" open-type="getUserInfo" bindgetuserinfo="getUserInfo" >
+			<image src="/images/icon/my-select.png" style="width: 60rpx;height: 60rpx;border-radius: 50%;"/>
+		</button>
+	</block>
+</view>
+
+<block wx:if="{{!folderId}}">
+	<view wx:if="{{ad.location.header.length > 0}}">
+		<block wx:if="{{ad.location.header.length > 1}}">
+			<swiper autoplay vertical interval="3500" circular="true" style="width: 750rpx;height: 120rpx">
+				<block wx:for="{{ad.location.header}}">
+					<swiper-item>
+						<image src="{{item.pic}}" data-location="header" data-index="{{index}}" bindtap="goToAd" style="width: 750rpx;height: 120rpx;"/>
+					</swiper-item>
+				</block>
+			</swiper>
+		</block>
+		<block wx:else>
+			<block wx:for="{{ad.location.header}}">
+				<block wx:if="{{item.status}}">
+					<image src="{{item.pic}}" data-location="header" data-index="{{index}}" bindtap="goToAd" style="width: 750rpx;height: 120rpx;"/>
+				</block>
+			</block>
+		</block>
+	</view>
+</block>
+
+<block wx:if="{{lists.length > 0}}">
+	<block wx:if="{{folderId}}">
+		<view class="flex row" bindtap="goToReturn">
+			<view style="padding: 30rpx;">
+				<image src="/images/icon/return.png" style="width: 50rpx;height: 50rpx;"/>
+			</view>
+			<view class="folderName" style="margin-top: 8rpx;">返回上一级</view>
+		</view>
+	</block>
+	<checkbox-group bindchange="checkboxChange" style="padding-bottom: 120rpx;">
+		<block wx:for="{{lists}}">
+			<block wx:if="{{item}}">
+				<view class="flex row">
+					<view style="padding: 30rpx;position: relative;" data-index="{{index}}">
+						<block wx:if="{{!isSelected}}">
+							<block wx:if="{{item.isImage}}">
+								<image src="{{item.fileId}}" style="width: 50rpx;height: 50rpx;border-radius: 10rpx;"/>
+							</block>
+							<block wx:else>
+								<image src="/images/extensions/{{item.type}}.png" style="width: 50rpx;height: 50rpx;"/>
+							</block>
+						</block>
+						<block wx:else>
+							<block wx:if="{{item.isFolder}}">
+								<image src="/images/extensions/{{item.type}}.png" style="width: 50rpx;height: 50rpx;"/>
+							</block>
+							<block wx:if="{{!item.isFolder}}">
+								<checkbox class="checkbox" style="width: 50rpx;" value="{{index}}" checked="{{item.checked}}"/>
+							</block>
+						</block>
+					</view>
+					<view data-index="{{index}}" bindtap="openFile">
+						<view class="{{item.isFolder ? 'folderName' : 'fileName'}}">{{item.filename}}</view>
+						<view class="time" wx:if="{{!item.isFolder}}">{{item.createTime}}</view>
+					</view>
+					<view class="size" data-index="{{index}}" bindtap="openFile">{{item.size}}</view>
+					<view style="padding: 30rpx;text-align: center;">
+						<view style="width: 100%;height: 100%" data-index="{{index}}" catchtap="showFolderTools">
+							<image src="/images/icon/extend.png" style="width: 50rpx;height: 50rpx;"/>
+						</view>
+					</view>
+				</view>
+			</block>
+		</block>
+		<view style="padding-bottom: 50rpx;"></view>
+	</checkbox-group>
+</block>
+<block wx:elif="{{noneFile}}">
+	<image src="/images/icon/none.png" style="width: 300rpx;height: 213rpx;margin: 250rpx 205rpx 30rpx 245rpx;"/>
+	<view style="text-align: center;font-size: 26rpx;color:#8a8a8a;margin-bottom: 50rpx">
+		还没有任何文件
+	</view>
+	<view class="button" data-type="Add" data-extend="{{true}}" bindtap="showTools">
+		添加内容
+	</view>
+	<block wx:if="{{folderId}}">
+		<view class="button solid" style="margin-top: -20rpx;" bindtap="goToReturn">
+			返回上一级
+		</view>
+	</block>
+</block>
+
+<view class="mask z-index" wx:if="{{userGuide < 3}}" catchtouchmove="forbid">
+	<block wx:if="{{userGuide == 1}}">
+		<image src="/images/icon/my-select.png" style="width: 60rpx;height: 60rpx;border-radius: 50%;position: absolute;top:20rpx;right: 30rpx;"/>
+		<image src="/images/guide/avatar.png" style="width: 300rpx;height: 110rpx;position: absolute;top:80rpx;right: 30rpx;"/>
+	</block>
+
+	<block wx:if="{{userGuide == 2}}">
+		<view style="position: absolute;top:642rpx;left: 50%;margin-left:-380rpx;width: 750rpx;">
+			<view class="button" style="width: 370rpx;">
+				添加内容
+			</view>
+		</view>
+
+		<view style="position: absolute;top:790rpx;left: 245rpx;">
+			<image src="/images/guide/add.png" style="width: 300rpx;height: 75rpx;"/>
+		</view>
+	</block>
+	
+	<view style="position: absolute;bottom: 100rpx;left: 50%;margin-left:-375rpx;width: 750rpx;">
+		<view class="guideButton" bindtap="newGuide">
+			<block wx:if="{{userGuide < 2}}">
+				下一步
+			</block>
+			<block wx:else>
+				我知道了
+			</block>
+		</view>
+	</view>
+</view>
+
+<view class="mask" hidden="{{maskHidden}}" bindtap="closeMask" catchtouchmove="forbid">
+	<view class="showTools {{lengthScreen ? 'fix-iphonex-button' : ''}}" wx:if="{{showFolderTools}}">
+		<view style="border-bottom: 2rpx solid #f5f5f5;height: auto;">
+			<view class="flex" style="padding: 30rpx 50rpx;">
+				<image src="/images/extensions/{{nowFileInfo.type}}.png" style="width: 50rpx;height: 50rpx;"/>
+				<view class="folderName" style="margin-left: 30rpx;line-height: 50rpx;">
+					<block wx:if="{{!nowFileInfo.filename && nowFileInfo.groupId}}">
+						<open-data type="groupName" open-gid="{{nowFileInfo.groupId}}"></open-data>
+					</block>
+					<block wx:else>
+						{{nowFileInfo.filename}}
+					</block>
+				</view>
+			</view>
+		</view>
+		<view class="flex tools" catchtap="confirmRenameFolder">
+			<image src="/images/icon/rename.png"/>
+			<view class="title">
+				重命名{{nowFileInfo.isFolder ? '文件夹' : '文件'}}
+			</view>
+		</view>
+		<view class="flex tools" catchtap="confirmDelFolder">
+			<image src="/images/icon/del.png"/>
+			<view class="title">
+				删除{{nowFileInfo.isFolder ? '文件夹' : '文件'}}
+			</view>
+		</view>
+		<block wx:if="{{!nowFileInfo.isFolder && (nowFileInfo.isImage || nowFileInfo.isVideo)}}">
+			<view class="flex tools" catchtap="downLoadComplete">
+				<image src="/images/icon/download.png"/>
+				<view class="title">
+					下载文件
+				</view>
+			</view>
+		</block>
+		<block wx:elif="{{!nowFileInfo.isFolder && !nowFileInfo.isImage && !nowFileInfo.isVideo}}">
+			<view class="flex tools" catchtap="goToDownLoadLink">
+				<image src="/images/icon/download.png"/>
+				<view class="title">
+					下载文件
+				</view>
+			</view>
+		</block>
+		<block wx:if="{{nowFileInfo.isFolder}}">
+			<button style="background-color: #fff;padding: 0rpx;line-height: 0rpx;margin:0;" data-title="{{nowFileInfo.filename}}" data-fid="{{nowFileInfo.id}}" open-type="share">
+				<view class="flex tools" catchtap="confirmDelFolder">
+					<image src="/images/icon/share.png"/>
+					<view class="title">分享文件夹</view>
+				</view>
+			</button>
+		</block>
+	</view>
+	<view class="extendTool" style="bottom: {{lengthScreen ? '170' : '120'}}rpx;" wx:if="{{extendTool}}">
+		<view class="close" bindtap="closeMask">
+			<image src="/images/icon/close.png" style="width: 36rpx;height: 36rpx;"/>
+		</view>
+		<block wx:if="{{showBottomTools['Op']}}">
+			<view class="flex wrap add">
+				<view class="line width50" catchtap="delConfirm">
+					<image src="/images/toolbar/del.png"/>
+					<view>删除</view>
+				</view>
+				<view class="line width50" catchtap="downLoadConfirm">
+					<image src="/images/toolbar/download.png"/>
+					<view>下载</view>
+				</view>
+			</view>
+		</block>
+		<block wx:if="{{showBottomTools['Filter']}}">
+			<view class="flex wrap filter">
+				<block wx:for="{{fileType}}">
+					<view class="line width25" data-type="{{index}}" catchtap="selectType">
+						<image src="/images/extensions/{{index}}.png"/>
+						<view>{{item}}</view>
+					</view>
+				</block>
+				<view class="line width25" data-type="" catchtap="selectType">
+					<image src="/images/extensions/all.png"/>
+					<view>全部</view>
+				</view>
+			</view>
+		</block>
+		<block wx:if="{{showBottomTools['Add']}}">
+			<view class="flex justify-around wrap add">
+				<view class="line" catchtap="showCreateFolder">
+					<image src="/images/icon/folder.png"/>
+					<view>文件夹</view>
+				</view>
+<!-- 				<view class="line width33" catchtap="qunFile">
+					<image src="/images/icon/topic.png"/>
+					<view>专辑</view>
+				</view> -->
+				<view class="line" catchtap="uploadGroupFile">
+					<image src="/images/icon/wechat.png"/>
+					<view>微信文件</view>
+				</view>
+				<view class="line" catchtap="uploadPhoneFile" wx:if="{{userInfo.isAdmin}}">
+					<image src="/images/icon/upload.png"/>
+					<view>上传照片</view>
+				</view>
+			</view>
+		</block>
+	</view>
+</view>
+
+<view class="flex toolbar {{lengthScreen ? 'fix-iphonex-button' : ''}}" wx:if="{{!hideTools}}">
+	<view class="icon {{selectAll ? 'gray' : ''}}" bindtap="selectAll">
+		<image src="/images/toolbar/{{selectAll ? 'all-unselect' : 'all'}}.png"/>
+		<view>{{selectAll ? '选择' : '取消选择'}}</view>
+	</view>
+	<view class="icon {{!confirmDelete ? 'gray' : ''}}" data-type="Op" data-extend="{{true}}" bindtap="showTools">
+		<image src="/images/toolbar/{{!confirmDelete ? 'op-unselect' : 'op'}}.png"/>
+		<view>操作</view>
+	</view>
+	<view class="icon {{!showBottomTools['Filter'] ? 'gray' : ''}}" data-type="Filter" data-extend="{{true}}" bindtap="showTools">
+		<image src="/images/toolbar/{{!showBottomTools['Filter'] ? 'select-unselect' : 'select'}}.png"/>
+		<view>筛选</view>
+	</view>
+	<view class="icon {{!showBottomTools['Add'] ? 'gray' : ''}}" data-type="Add" data-extend="{{true}}" bindtap="showTools">
+		<image src="/images/toolbar/{{!showBottomTools['Add'] ? 'add-unselect' : 'add'}}.png"/>
+		<view>添加</view>
+	</view>
+</view>
+
+<modal show="{{createFolder}}" custom="true">
+	<form bindsubmit="formFolder">
+	    <view class="tui-modal-custom" wx:if="{{createFolder}}">
+	    	<view style="position: absolute;top: 20rpx;right: 30rpx;" bindtap="closeCreateFolder">
+				<image src="/images/icon/close.png" style="width: 36rpx;height: 36rpx;"/>
+			</view>
+			<block wx:if="{{groupId}}">
+				<view style="margin: 40rpx;background: #F5F5F5;height: 80rpx;line-height:80rpx;width: auto;">
+					<open-data type="groupName" open-gid="{{groupId}}"></open-data>
+				</view>
+			</block>
+			<block wx:if="{{createType}}">
+				<input style="margin: 40rpx;background: #F5F5F5;height: 80rpx;width: 360rpx;" placeholder="请输入{{topicType[createType]}}专辑名称" name="folderName" focus/>
+			</block>
+			<block wx:else>
+				<input style="margin: 40rpx;background: #F5F5F5;height: 80rpx;width: 360rpx;" placeholder="请输入{{nowFileInfo.isFolder ? '文件夹' : '文件'}}名称" name="folderName" focus value="{{nowFileInfo.filename}}"/>
+			</block>
+	      	<button formType="submit" class="button" style="margin:30rpx auto;width: 380rpx">立即提交</button>
+	    </view>
+    </form>
+</modal>
+
+<modal show="{{confirmDelete}}" bind:click="delOp" bind:cancel="cancelDel" content="确认要删除选中的{{delTotalNum}}个文件？" color="#999" size="32" shape="circle" fadein="true"></modal>
+
+<modal show="{{confirmDeleteFolder}}" data-type="folder" bind:click="delOp" bind:cancel="cancelDel" content="确认要删除{{nowFileInfo.filename}}{{nowFileInfo.isFolder ? '文件夹' : '文件'}}？" color="#999" size="32" shape="circle" fadein="true"></modal>
+
+<modal show="{{confirmUpdate}}" bind:click="goToTask" bind:cancel="cancelDel" content="空间不足是否要升级" color="#999" size="32" shape="circle" fadein="true"></modal>
+
+<modal show="{{confirmDownLoad}}" bind:click="downLoadFile" bind:cancel="cancelDel" content="目前只支持图片和视频下载，确认是否下载？" color="#999" size="32" shape="circle" fadein="true"></modal>
+
+<toast id="tui-tips-ctx"></toast>

@@ -1,0 +1,95 @@
+<block wx:if="{{lists.length > 0}}">
+	<block wx:if="{{folderId && subFolder}}">
+		<view class="flex row" bindtap="goToReturn">
+			<view style="padding: 30rpx;">
+				<image src="/images/icon/return.png" style="width: 50rpx;height: 50rpx;"/>
+			</view>
+			<view class="folderName" style="margin-top: 8rpx;">返回上一级</view>
+		</view>
+	</block>
+	<block wx:if="{{topic == 'album'}}">
+		<!-- <view style="padding:25rpx 30rpx 15rpx 30rpx;font-size: 28rpx;color:#333;">2020年1月26日</view> -->
+		<view class="flex wrap" style="margin:3rpx;">
+			<block wx:for="{{lists}}">
+				<view style="height: 248rpx;padding: 1rpx" data-index="{{index}}" bindtap="openFile">
+					<image src="{{item.fileId}}" style="width: 247rpx;height: 247rpx;" mode="aspectFill"/>
+				</view>
+			</block>
+		</view>
+	</block>
+	<block wx:else>
+		<block wx:for="{{lists}}">
+			<block wx:if="{{item}}">
+				<view class="flex row">
+					<view style="padding: 30rpx;" data-index="{{index}}" bindtap="showFolderTools">
+						<block wx:if="{{item.isImage}}">
+							<image src="{{item.fileId}}" style="width: 50rpx;height: 50rpx;border-radius: 10rpx;"/>
+						</block>
+						<block wx:else>
+							<image src="/images/extensions/{{item.type}}.png" style="width: 50rpx;height: 50rpx;"/>
+						</block>
+					</view>
+					<view data-index="{{index}}" bindtap="showFolderTools">
+						<view class="{{item.isFolder ? 'folderName' : 'fileName'}}">{{item.filename}}</view>
+						<view class="time" wx:if="{{!item.isFolder}}">{{item.createTime}}</view>
+					</view>
+					<view class="size">{{item.size}}</view>
+				</view>
+			</block>
+		</block>
+	</block>
+	<view style="padding-bottom: 50rpx;"></view>
+</block>
+<block wx:elif="{{noneFile}}">
+	<image src="/images/icon/none.png" style="width: 300rpx;height: 213rpx;margin: 250rpx 205rpx 30rpx 245rpx;"/>
+	<view style="text-align: center;font-size: 26rpx;color:#8a8a8a;margin-bottom: 50rpx">
+		还没有任何文件
+	</view>
+	<block wx:if="{{folderId && subFolder}}">
+		<view class="button solid" style="margin-top: -20rpx;" bindtap="goToReturn">
+			返回上一级
+		</view>
+	</block>
+</block>
+<view class="mask" hidden="{{maskHidden}}" bindtap="closeMask" catchtouchmove="forbid">
+	<view class="showTools {{lengthScreen ? 'fix-iphonex-button' : ''}}" wx:if="{{showFolderTools}}">
+		<view style="border-bottom: 2rpx solid #f5f5f5;height: auto;">
+			<view class="flex" style="padding: 30rpx 50rpx;">
+				<image src="/images/extensions/{{nowFileInfo.type}}.png" style="width: 50rpx;height: 50rpx;"/>
+				<view class="folderName" style="margin-left: 30rpx;line-height: 50rpx;">
+					<block wx:if="{{!nowFileInfo.filename && nowFileInfo.groupId}}">
+						<open-data type="groupName" open-gid="{{nowFileInfo.groupId}}"></open-data>
+					</block>
+					<block wx:else>
+						{{nowFileInfo.filename}}
+					</block>
+				</view>
+			</view>
+		</view>
+		<block wx:if="{{!nowFileInfo.isFolder && (nowFileInfo.isDoc || nowFileInfo.isImage)}}">
+			<view class="flex tools" catchtap="openFile">
+				<image src="/images/icon/view.png"/>
+				<view class="title">
+					预览文件
+				</view>
+			</view>
+		</block>
+		<block wx:if="{{!nowFileInfo.isFolder && (nowFileInfo.isImage || nowFileInfo.isVideo)}}">
+			<view class="flex tools" catchtap="downLoadComplete">
+				<image src="/images/icon/download.png"/>
+				<view class="title">
+					下载文件
+				</view>
+			</view>
+		</block>
+		<block wx:elif="{{!nowFileInfo.isFolder && !nowFileInfo.isImage && !nowFileInfo.isVideo}}">
+			<view class="flex tools" catchtap="goToDownLoadLink">
+				<image src="/images/icon/download.png"/>
+				<view class="title">
+					下载文件
+				</view>
+			</view>
+		</block>
+	</view>
+</view>
+<toast id="tui-tips-ctx"></toast>

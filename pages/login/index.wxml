@@ -1,0 +1,13 @@
+<view style="text-align: center;margin-top: 80rpx;">
+	<block wx:if="{{!isLogin}}">
+		<icon type="waiting" size="80"/>
+		<view style="margin: 30rpx 230rpx;font-size: 36rpx;">你确认要登录我存小程序吗？</view>
+		<button type="primary" style="margin: 60rpx 40rpx 30rpx 40rpx;" bindtap="confirmLogin">确认</button>
+		<button style="margin: 40rpx;" bindtap="goToHome">取消</button>
+	</block>
+	<block wx:else>
+		<icon type="success" size="80"/>
+		<view style="margin: 30rpx 230rpx;font-size: 36rpx;">登录成功</view>
+		<button style="margin: 60rpx 40rpx 30rpx 40rpx;" bindtap="goToHome">返回首页</button>
+	</block>
+</view>

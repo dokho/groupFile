@@ -1,0 +1,43 @@
+<view class="goToHome" style="top:{{topMenu.top * 2}}rpx;" bindtap="goToHome">
+	返回首页
+</view>
+<view id="bg">
+	<image src="/images/topic/spring/bg.png" class="bg"/>
+</view>
+
+<block wx:if="{{cover}}">
+	<view id="container" style="opacity: 0;">
+		<image src="/images/topic/spring/cover.png" class="cover"/>
+	</view>
+
+	<view id="join" style="opacity: 0;" bindtap="startAlbunm">
+		<image src="/images/topic/spring/join.png" class="join"/>
+	</view>
+</block>
+<block wx:else>
+	<view style="position: absolute;top:{{lengthScreen ? 220 : 180}}rpx;left: 50rpx;width: 660rpx;">
+		<view class="flex wrap">
+			<block wx:for="{{lists}}">
+				<view class="list" data-id="{{index}}" bindtap="previewImage">
+					<image id="pic{{index}}" src="{{item.url}}" mode="aspectFill"/>
+				</view>
+			</block>
+		</view>
+		<view style="text-align: center;margin-top: 30rpx;" bindtap="savePic">
+			<image src="/images/topic/spring/save.png" style="width: 250rpx;height: 40rpx;"/>
+		</view>
+		<view class="flex justify-around" style="margin-top: 30rpx;padding: 0rpx 100rpx;">
+			<button open-type="share" class="share">
+				<image src="/images/topic/spring/share.png" style="width: 153rpx;height: 40rpx;"/>
+			</button>
+			<view bindtap="loadPic">
+				<image src="/images/topic/spring/change.png" style="width: 123rpx;height: 40rpx;"/>
+			</view>
+		</view>
+		<view class="tips">点击图片查看大图，大图模式长按可以保存图片</view>
+	</view>
+</block>
+
+<modal show="{{commpleteUpdate}}" bind:click="goToFolder" bind:cancel="cancelDel" content="保存成功，是否立即查看" color="#999" size="32" shape="circle" fadein="true"></modal>
+
+<toast id="tui-tips-ctx"></toast>
